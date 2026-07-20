@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<dpInst>
+    <legacyMode/>
+    <deleteBinaries/>
+    <forceIfDriverIsNotBetter/>
+    <group>
+        <package path=".\driver\SciCmpst.INF" />
+	<package path=".\driver\SciModem.inf" /> 
+        <package path=".\driver\SciU2S.INF" />
+    </group>
+</dpInst>
