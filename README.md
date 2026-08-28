@@ -1,82 +1,141 @@
-# Hisense A7 CC (HNR320T) 救砖工具与文档
+# oi_enhancements / Prisir AI
 
-海信阅读手机 A7 CC / HNR320T / 紫光展锐 UD710 (T7510) 救砖工具包
+> **Prisir(湃睿思) AI** — 本地对话式 AI 助手,免登录,系统级 Agent,本地优先。
 
-> **成功救活案例**:2026-07-20 从完全黑屏 + USB 不识状态成功救活
+这是 `oi_enhancements` 仓库,包含 Prisir AI、oiagent、prisr_findex、
+prisr_fcontent、fastlane、aureon 等子项目。
 
-## 🎯 这是什么
+更详细的架构说明请阅读 [ARCHITECTURE-2026-07-03.md](./ARCHITECTURE-2026-07-03.md)
+与 [INVENTORY-2026-07-03.md](./INVENTORY-2026-07-03.md)。仓库根目录还有
+按子项目组织的 `docs/` 目录,提供设计与计划文档。
 
-- **救砖工具**:`spd_dump` (Linux) + Windows 驱动 + WSL 配置
-- **完整文档**:从完全黑屏到恢复系统的每一步操作
-- **备份文件**:原厂 SPL/teecfg/tos/sml 安全分区备份
-- **踩坑记录**:Zadig / usbipd / WSL / autodload 模式的所有坑
 
-## 🚀 快速开始
+## 子项目概览
 
-### 前置条件
+| 子项目 | 说明 |
+| ------ | ---- |
+| `oiagent_web.py` | 主 Web 后端(国画风聊天 UI + LLM 路由 + SQLite 持久化) |
+| `oiagent-shell/` | Electron 对话壳(系统托盘常驻,全局热键,自启动) |
+| `prisir_findex/` | Rust 本机文件搜索引擎(类 Everything,只索引元数据) |
+| `prisir_fcontent/` | 文件内容索引与 OCR(支持翻译、截图识图) |
+| `fastlane/` | LLM provider 路由(Anthropic / OpenAI / 兼容 API) |
+| `aureon/` | 端侧 Agent 核心模块 |
+| `crypto_conduit/` | token / 加密通道 |
+| `e2e_share_a2h/`, `e2e_share_rot/` | 配对 / 局域网 / 遥控 |
+| `assets/` | 项目图标与 UI 资源(受 TRADEMARKS.md 约束) |
+| `installer/` | 安装/卸载脚本(Windows NSIS + Linux bash) |
+| `docs/` | 设计与计划文档 |
 
-- Windows 10/11 + WSL2 Ubuntu
-- 海信 A7 CC (HNR320T) 手机
-- 手机能进 autodload 模式(音量上+音量下+电源)
+## 平台
 
-### 救砖流程
+- **Windows**:NSIS 安装包(`installer/PrisirAI-Setup-*.exe`)。
+- **Linux**:Debian/Ubuntu bash 安装脚本(`installer/linux-install.sh`),
+  X11 + GTK(测试于 Debian 13 + xfwm4)。
+- **macOS**:未测试,代码路径已尽量跨平台但需用户自行打包。
 
-```bash
-# 1. 装 WinUSB 驱动(用 Zadig)
-# 2. 装 usbipd-win, bind + attach iWHALE2 到 WSL
-# 3. 在 WSL 里跑 spd_dump 命令
-```
 
-完整步骤见 [docs/救砖复盘-成功.md](docs/救砖复盘-成功.md)
+## License
 
-## 📁 目录结构
+OI Enhancements is available for **personal non-commercial use** under
+the **OI Enhancements Personal and Commercial Source License v1.0
+(OIE-PCS-1.0)**.
 
-```
-hisense-a7cc-rescue-toolkit/
-├── README.md                       ← 本文档
-├── docs/
-│   ├── 救砖复盘-成功.md            ← 完整救砖过程
-│   ├── 救砖后必做清单.md           ← 救砖后注意事项
-│   └── 按键组合.md                 ← 所有按键模式
-├── tools/
-│   ├── spd_dump                    ← Linux 版 spd_dump
-│   ├── spd_dump_interactive        ← 交互版
-│   ├── fdl1-dl.bin                 ← FDL1 下载协议
-│   ├── uboot-mod.bin               ← 修改版 uboot
-│   ├── u-boot-spl-16k-sign.bin     ← 签名版 SPL
-│   ├── userdata.bin                ← 清空模板
-│   └── drivers/                    ← Windows 驱动集合
-├── backup/
-│   ├── spl.bin                     ← 原厂 SPL 备份
-│   ├── teecfg.bin                  ← TEE 配置备份
-│   ├── tos.bin                     ← TOS 备份
-│   ├── sml.bin                     ← SML 备份
-│   └── contacts.vcf                ← 联系人备份
-└── scripts/
-    ├── install-drivers.bat         ← Windows 一键装驱动
-    ├── make-update-zip.ps1         ← update.zip 打包
-    └── rescue.sh                   ← 救砖一键脚本
-```
+- **Commercial use**, organizational deployment, paid services,
+  commercial distribution, and integration into commercial products
+  require a separate written commercial license from the Project
+  Copyright Holder. See [COMMERCIAL-LICENSE.md](./COMMERCIAL-LICENSE.md).
+- **Modifications to designated Core Components** (see
+  [CORE-COMPONENTS.md](./CORE-COMPONENTS.md)) must be made available
+  under OIE-PCS-1.0 when Distributed or made available as a Network
+  Service.
+- **Brand and trademarks** — including the names "Prisir AI",
+  "oiagent", "prisraiclass", the Prisir flame logo, and the icons in
+  `assets/` — are **not** licensed by OIE-PCS-1.0. See
+  [TRADEMARKS.md](./TRADEMARKS.md).
+- **Past versions** may be additionally available under the Apache
+  License 2.0. See [LICENSE-POLICY.md](./LICENSE-POLICY.md) for the
+  delayed permissive licensing strategy.
 
-## ⚠️ 重要提示
+SPDX-License-Identifier: `LicenseRef-OI-Enhancements-PCS-1.0`
 
-1. **救砖有风险** - 擦 SPL 后必须立刻写新 SPL,不能断电
-2. **WSL 必需** - spd_dump.exe 在 Windows 下找不到设备(已知问题)
-3. **驱动必须 WinUSB** - Zadig 装 libusbK 会拦截 spd_dump
-4. **按键组合要对** - autodload 是 音量上+下+电源,重启是 电源+音量上
+> **Note**: OIE-PCS-1.0 is **not** an OSI-approved open source
+> license because it restricts Commercial Use and reserves Brand
+> rights. It is a source-available license with a commercial
+> licensing pathway.
 
-## 🙏 参考与致谢
+### Legal framework (current version)
 
-- [4bitFox/hisense_a7cc](https://github.com/4bitFox/hisense_a7cc) - 救砖工具来源
-- [4bitFox/CVE-2022-38694](https://github.com/4bitFox/CVE-2022-38694_unlock_bootloader) - spd_dump 工具
-- [TomKing062/CVE-2022-38694](https://github.com/TomKing062/CVE-2022-38694_unlock_bootloader) - CVE 研究
-- [Zadig](https://zadig.akeo.ie/) - USB 驱动安装
-- [usbipd-win](https://github.com/dorssel/usbipd-win) - USB 转发工具
+- **Governing law**: laws of the Hong Kong Special Administrative
+  Region (HK SAR).
+- **Dispute resolution**: arbitration administered by the Hong Kong
+  International Arbitration Centre (HKIAC), seat Hong Kong.
+- **Language of arbitration**: English, with right to submit
+  Chinese-language evidence without translation at the tribunal's
+  discretion.
+- **Commercial license defaults**: 1-year term; devices/users per
+  executed agreement; minor-version upgrades included; major-version
+  upgrades by paid addendum.
+- **Breach**: 30-day written notice + 30-day cure period for general
+  breaches; immediate termination for unlicensed Commercial Use,
+  Brand misuse, undisclosed Core Component modifications, and patent
+  litigation against the Project Copyright Holder.
+- **Enforcement**: arbitral award enforceable under Mainland-HK
+  Reciprocal Enforcement Arrangement (2019), New York Convention
+  (1958), and Hague Judgments Convention (2019/2023).
 
-## 📝 License
+The full 23-section text is in [LICENSE](./LICENSE).
 
-MIT - 自由使用,欢迎分享
+### Per-version licensing summary
 
----
+| Version | Primary License | Additional Future License | Status |
+| ------- | --------------- | ------------------------- | ------ |
+| Latest stable (v2.x) | OIE-PCS-1.0 | (none) | Active |
+| v1.x after v2.0 ships | OIE-PCS-1.0 | Apache-2.0 | Legacy Community Release |
+| v0.x and earlier | as published | (none) | Archived |
 
-**如果你也有海信 A7 CC 救砖需求,这个仓库能帮你少走弯路。**
+See [LICENSE-POLICY.md](./LICENSE-POLICY.md) for the detailed policy.
+
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md). All contributions require
+DCO sign-off (`git commit -s`); contributions to Core Components or
+large contributions additionally require a CLA.
+
+
+## Third-party components
+
+See [THIRD-PARTY-NOTICES](./THIRD-PARTY-NOTICES) for the full list
+of Python / Rust / Node.js dependencies and their licenses.
+
+
+## Security
+
+Please report security issues privately to the contact listed in
+[COMMERCIAL-LICENSE.md](./COMMERCIAL-LICENSE.md). Do **not** open a
+public GitHub issue for security vulnerabilities.
+
+
+## Trademark and brand use
+
+See [TRADEMARKS.md](./TRADEMARKS.md). Factual references are
+permitted; use of the Brand for commercial purposes requires a
+separate Brand license.
+
+
+## Contact
+
+- GitHub: https://github.com/63894696/oi_enhancements
+- Commercial license inquiries: open a GitHub issue with the
+  `commercial-license` label.
+- See [COMMERCIAL-LICENSE.md](./COMMERCIAL-LICENSE.md) for full
+  contact details.
+
+
+## Copyright
+
+Copyright (c) 2026 63894696. All rights reserved.
+
+The Software is licensed (not sold) under the terms of
+[OIE-PCS-1.0](./LICENSE). Brand elements are reserved under
+[TRADEMARKS.md](./TRADEMARKS.md).
