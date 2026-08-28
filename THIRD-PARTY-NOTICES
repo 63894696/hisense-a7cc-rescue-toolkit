@@ -1,0 +1,177 @@
+# Third-Party Notices
+
+This document catalogs third-party components used by OI Enhancements
+and their respective licenses. Per LICENSE §6, third-party components
+are NOT relicensed under OIE-PCS-1.0 and remain under their own
+licenses.
+
+The list below is **indicative** — the authoritative source is the
+`package.json`, `pyproject.toml` / `requirements.txt`, and
+`Cargo.toml` of each sub-project, plus the actual files installed
+by those package managers. If You find a discrepancy, please open
+a GitHub issue.
+
+
+## Runtime environments
+
+### Python 3.x
+- License: PSF License (Python Software Foundation License)
+- URL: https://www.python.org/psf/license/
+- Note: most Linux distributions bundle Python under the same
+  license. Used by `oiagent_web.py`, `prisir_findex/shell_findex.py`,
+  `prisir_fcontent/*.py`, `fastlane/*.py`, and most `.py` in this
+  repo.
+
+### Node.js + Electron (oiagent-shell)
+- Node.js — MIT — https://nodejs.org/
+- Electron — MIT — https://www.electronjs.org/
+- Tray / Notification / nativeImage — part of Electron (MIT)
+- Used by `oiagent-shell/`.
+
+
+## Python packages
+
+(Pinned versions are recorded in `requirements.txt` / `pyproject.toml`
+where present. The list below is by package family; see the
+package files for exact versions.)
+
+- **pypdf** — BSD-3-Clause — https://github.com/py-pdf/pypdf
+  Used by `prisir_fcontent/extract.py`.
+- **Pillow** — HPND (Historical Permission Notice and Disclaimer) —
+  https://python-pillow.org/
+  Used by `prisir_fcontent/overlay_translate.py`, screenshots.
+- **opencv-python-headless** — Apache-2.0 —
+  https://github.com/opencv/opencv-python
+  Used by OCR + screenshot utilities.
+- **rapidocr_onnxruntime** — Apache-2.0 —
+  https://github.com/RapidAI/RapidOCR
+  Used by `prisir_fcontent/ocr_eval.py`. Bundles ONNX Runtime
+  (MIT) and PaddleOCR ONNX models (Apache-2.0).
+
+All Python deps are pinned in `requirements.txt` where present.
+
+
+## Rust crates
+
+(Pinned in `Cargo.lock` of each crate.)
+
+- **prisir_findex** — internal crate; its dependencies are listed
+  in `prisir_findex/Cargo.lock`.
+- **prisir_fcontent** (if Rust portion present) — internal crate;
+  its dependencies are listed in `prisir_fcontent/Cargo.lock`.
+
+Common Rust deps used:
+
+- **rusqlite** — MIT — https://github.com/rusqlite/rusqlite
+- **serde / serde_json** — MIT / Apache-2.0
+- **walkdir** — MIT / Unlicense
+- **chrono** — MIT / Apache-2.0
+- **clap** — MIT / Apache-2.0
+
+The exact list and versions are in `Cargo.lock`. Some dual-licensed
+crates may be used under either license; the choice is made by the
+crate author at the top of each source file.
+
+
+## ONNX models (in prisir_fcontent/models/)
+
+- **PP-OCRv4 / ch_PP-OCRv4 / en_PP-OCRv4** — Apache-2.0 —
+  https://github.com/PaddlePaddle/PaddleOCR
+  Used for OCR; bundled in `prisir_fcontent/models/` (not in git;
+  downloaded on first use). Apache-2.0 means You may use, modify,
+  and redistribute them subject to Apache-2.0 terms.
+
+These are **model weights**, NOT source code. They are governed by
+their respective model licenses, not by OIE-PCS-1.0. If You
+Distribute the Software with these model weights bundled, You
+must comply with the model's license (Apache-2.0 for PaddleOCR
+ONNX).
+
+
+## Fonts
+
+- **Microsoft YaHei / SimSun / MS Mincho** — Microsoft
+  Windows-bundled fonts. Bundling is generally permitted for use
+  with Windows but redistribution outside Windows is restricted
+  by Microsoft's terms. The Software uses these only when present
+  on the user's system; it does NOT bundle them.
+- **Noto CJK** — SIL Open Font License 1.1 —
+  https://github.com/googlefonts/noto-cjk
+  Used on Linux via the `fonts-noto-cjk` apt package.
+- **DejaVu Sans** — DejaVu fonts license (a permissive license
+  based on Bitstream Vera) —
+  https://dejavu-fonts.github.io/License.html
+  Used on Linux as fallback font.
+
+The Software does NOT bundle any font files; it loads fonts from
+the system at runtime. Users are responsible for ensuring their
+use of system fonts is permitted.
+
+
+## Icons
+
+- Icons in `assets/` are project-owned Brand elements; their use
+  is governed by TRADEMARKS.md, NOT by OIE-PCS-1.0. See TRADEMARKS.md
+  for usage rules.
+- No third-party icons are bundled in `assets/`.
+
+
+## Tools used in the build / development process
+
+These are not part of the shipped Software but are used to build it.
+
+- **Rust / rustup / cargo** — MIT / Apache-2.0
+- **NSIS (Nullsoft Scriptable Install System)** — zlib/libpng
+  license — https://nsis.sourceforge.io/
+  Used by the Windows installer builder.
+- **electron-builder** — MIT —
+  https://www.electron.build/
+  Used by `oiagent-shell/package.json` build scripts.
+- **GitHub Actions / GitHub Pages** — GitHub Terms of Service
+- **Visual Studio Code** — MIT (only used by developers; not
+  shipped)
+
+These tools do not affect the license of the Software You receive;
+they affect only the build process.
+
+
+## Network / API services (called at runtime, NOT bundled)
+
+The Software calls the following services via outbound HTTPS. These
+services are not part of the Software and are not licensed by
+OIE-PCS-1.0. Your use of them is governed by THEIR terms.
+
+- **Anthropic Claude API** — Anthropic Terms of Service
+- **OpenAI API** — OpenAI Terms of Use
+- **Other LLM provider APIs** added via `fastlane/providers/`
+- **babelspan.com** — read-only public updates JSON endpoint
+  (used by the brand-update notifier in `oiagent-shell/main.js`)
+
+The Software does NOT bundle model weights. All model inference is
+performed by remote APIs or by user-supplied local model servers.
+The Software's interface to these APIs is licensed under
+OIE-PCS-1.0; the APIs themselves are not.
+
+
+## Disclaimer of accuracy
+
+This document is maintained on a best-effort basis. The authoritative
+license of each dependency is the `LICENSE` / `README` / `NOTICE`
+file in that dependency's source tree. If You find an omission or
+inaccuracy, please open a GitHub issue or submit a PR adding the
+missing entry.
+
+
+## How to update this document
+
+When You add a new dependency:
+
+1. Add an entry here with: package name, license SPDX identifier,
+   upstream URL, which sub-project uses it.
+2. Update the corresponding `requirements.txt` / `Cargo.toml` /
+   `package.json` to pin a version.
+3. Open a PR; reviewers will check the license compatibility with
+   OIE-PCS-1.0.
+
+
+Last updated: 2026-08-28
